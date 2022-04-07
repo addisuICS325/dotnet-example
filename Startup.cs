@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EmployeesApp.Contracts;
-using EmployeesApp.Models;
-using EmployeesApp.Repository;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using MyAppT.Models;
+using MyAppT.Infrastructure;
 
-namespace EmployeesApp
+namespace MyAppT
 {
     public class Startup
     {
@@ -27,11 +22,9 @@ namespace EmployeesApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<EmployeeContext>(opts =>
-               opts.UseSqlServer(Configuration.GetConnectionString("sqlConnection")));
-
-            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-
+            services.AddDbContext<AppDbContext>(optionsBuilder => optionsBuilder.UseInMemoryDatabase("InMemoryDb"));
+            services.AddScoped<IRegisterRepository, RegisterRepository>();
+            services.AddSingleton<IRepository, Repository>();
             services.AddControllersWithViews();
         }
 
@@ -59,7 +52,7 @@ namespace EmployeesApp
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Employees}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

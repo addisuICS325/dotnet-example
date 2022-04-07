@@ -1,39 +1,26 @@
-using EmployeesApp.Contracts;
-using EmployeesApp.Extensions;
-using EmployeesApp.Models;
-using EmployeesApp.Repository;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddDbContext<EmployeeContext>(opts =>
-			   opts.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection")));
-
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-
-
-builder.Services.AddControllersWithViews();
-
-var app = builder.Build();
-
-if (!app.Environment.IsDevelopment())
+namespace MyAppT
 {
-	app.UseExceptionHandler("/Home/Error");
-	app.UseHsts();
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+    }
 }
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapControllerRoute(
-	name: "default",
-	pattern: "{controller=Employees}/{action=Index}/{id?}");
-
-app.MigrateDatabase();
-app.Run();
-
-public partial class Program { }

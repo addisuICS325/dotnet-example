@@ -1,9 +1,11 @@
-namespace EmployeesApp.Models
-{
-	public class ErrorViewModel
-	{
-		public string? RequestId { get; set; }
+﻿using System;
 
-		public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
-	}
+namespace MyAppT.Models
+{
+    public class ErrorViewModel
+    {
+        public string RequestId { get; set; }
+
+        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+    }
 }
